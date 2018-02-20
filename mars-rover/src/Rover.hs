@@ -1,5 +1,5 @@
 module Rover
-    (  apply, move, turn, Command(..), Position(..), Direction (..), Turn(..)
+    (  apply, move, turn, Command(..), Position(..), Direction (..), Turn(..), RoverPosition
     ) where
 
 
@@ -12,7 +12,9 @@ data Turn = LeftTurn | RightTurn deriving (Show)
 
 data Command = Move Int | Turn Turn deriving (Show)
 
-move :: Position -> Int -> Either  Error Position
+type RoverPosition = Either  Error Position
+
+move :: Position -> Int -> RoverPosition
 move pos dis  =
       case dir pos of
         East  -> Right (pos { x = x pos + dis })
@@ -20,7 +22,7 @@ move pos dis  =
         North -> Right (pos { y = y pos + dis })
         South -> Right (pos { y = y pos - dis })
 
-turn :: Position -> Turn -> Either  Error Position
+turn :: Position -> Turn -> RoverPosition
 turn pos turn  = Right (pos { dir = dirTo ( dir pos ) turn })
 
 dirTo :: Direction -> Turn -> Direction
@@ -33,7 +35,7 @@ dirTo North RightTurn = East
 dirTo South LeftTurn  = East
 dirTo South RightTurn = West
 
-apply :: Either Error Position -> Command -> Either Error Position
+apply :: RoverPosition -> Command -> RoverPosition
 apply pos cmd =
       case cmd of
         Move distance ->   pos >>= (`move` distance)
