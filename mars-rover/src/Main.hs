@@ -14,7 +14,7 @@ main = doOption2
 
 doOption2 :: IO String
 doOption2 = do
-    putStrLn "Enter the command string : "
+    putStrLn "Command : "
     cmd <- getLine
     let cmdToRun =  reverse $ command cmd
     let result =  foldr  execState initialRover (map runRover  cmdToRun) -- [State RoverS Position]
