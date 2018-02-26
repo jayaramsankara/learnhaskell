@@ -9,7 +9,7 @@ module RoverS  where
 
   data Turn = LeftTurn | RightTurn deriving (Show)
 
-  data Command = Move Int | Turn Turn deriving (Show)
+  data Command = Move Int | Turn Turn  | None deriving (Show)
 
  -- state as a RoverS
   newtype RoverS  = RoverS { pos :: Position } deriving (Show )
@@ -30,6 +30,7 @@ module RoverS  where
                                   np =  case cmd of
                                       Move dis -> move cp dis
                                       Turn dir -> turn cp dir
+                                      _   ->  cp
 
                                   nr = RoverS np
                               in

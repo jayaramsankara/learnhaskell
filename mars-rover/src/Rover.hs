@@ -10,7 +10,7 @@ data Position = Position { x :: Int , y :: Int, dir :: Direction } deriving (Sho
 newtype Error = Error String deriving (Show)
 data Turn = LeftTurn | RightTurn deriving (Show)
 
-data Command = Move Int | Turn Turn deriving (Show)
+data Command = Move Int | Turn Turn  | None deriving (Show)
 
 type RoverPosition = Either  Error Position
 
@@ -40,3 +40,4 @@ apply pos cmd =
       case cmd of
         Move distance ->   pos >>= (`move` distance)
         Turn turnDir  ->   pos >>= (`turn` turnDir)
+        _ -> pos
