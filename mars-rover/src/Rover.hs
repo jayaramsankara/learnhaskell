@@ -1,17 +1,18 @@
 module Rover
-    (  doOption0, doOption1 , move, turn,
-    command, Command(..), Position(..), Direction (..),
+    (  doOption0, doOption1 , move, turn, command,
+    Command(..), Position(..), Direction (..),
      Turn(..)
     ) where
 
 
 
-data Direction = North | East | South | West  deriving (Show)
-
-data Position = Position { x :: Int , y :: Int, dir :: Direction } deriving (Show)
-data Turn = LeftTurn | RightTurn deriving (Show)
 
 data Command = Move Int | Turn Turn  | None deriving (Show)
+data Position = Position { x :: Int , y :: Int, dir :: Direction } deriving (Show)
+data Turn = LeftTurn | RightTurn deriving (Show)
+data Direction = North | East | South | West  deriving (Show)
+
+
 
 
 move :: Position -> Int -> Position

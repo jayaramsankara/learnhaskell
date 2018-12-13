@@ -1,8 +1,8 @@
-module RoverM (   RoverM(..), doOption1 , Position(..), Direction(..)) where
+module RoverM (   RoverM(..), doOption1 , Position(..), Direction(..), command, runRover) where
 
   import Rover( Position(..), Direction(..), Command(Move, Turn), move, turn, command )
 
-  newtype RoverM a = RoverData { pos :: a } deriving (Show )
+  newtype RoverM a = RoverM { pos :: a } deriving (Show )
 
   instance Monad RoverM  where
     return  = pure
@@ -11,23 +11,19 @@ module RoverM (   RoverM(..), doOption1 , Position(..), Direction(..)) where
                 rpos = pos r
                 r'pos = pos r'
               in
-                RoverData r'pos
+                RoverM r'pos
 
     (>>=) r f = f (pos r)
   instance Applicative RoverM where
-    pure = RoverData
-    (<*>) rf ra = RoverData (  pos rf (pos ra) )
+    pure = RoverM
+    (<*>) rf ra = RoverM (  pos rf (pos ra) )
   instance Functor RoverM where
-    fmap f ra = RoverData ( f (pos ra))
+    fmap f ra = RoverM ( f (pos ra))
 
-  -- rover :: Position -> RoverM Position
-  -- rover = return
-  --
-  -- pos :: RoverM Position -> Position
-  -- pos
 
-  runRover :: Command ->  RoverM Position ->  RoverM Position
-  runRover cmd rpos =
+
+  runRover :: RoverM Position -> Command ->  RoverM Position
+  runRover  rpos  cmd =
           case cmd of
            Move distance ->  return (move (pos rpos)  distance)
            Turn turnDir  ->  return (turn (pos rpos) turnDir)
@@ -42,7 +38,7 @@ module RoverM (   RoverM(..), doOption1 , Position(..), Direction(..)) where
        cmd <- getLine
        let cmdToRun = command cmd
        print (show cmdToRun)
-       let posfs  = fmap runRover cmdToRun
+       let posfs  = fmap (flip runRover) cmdToRun
        let finalPos = foldl foldFun pos posfs
        print (show finalPos)
        doOption1 (finalPos)
