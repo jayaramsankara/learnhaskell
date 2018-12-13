@@ -1,74 +1,26 @@
 module Main where
 
-import           RoverS
-
-import           Control.Monad.Trans.State
 
 
+-- import Rover
 
---import Rover
+-- import  RoverM
 
-type RoverData = State RoverS Position
+import RoverS
 
-initialRover = RoverS initalPos
-initialPosition = Right (Position 0 0 North)
-
-main :: IO ()
-main = doRecursive initialRover
+initialPosition =  Position 0 0 North
 
 
-
---doOption1 :: IO String
---doOption1 = do
-    --putStrLn "Enter the command string : "
-    --cmd <- getLine
-    --let cmdToRun =  reverse $ command cmd
-    --let result = foldr (flip Rover.apply ) initialPosition cmdToRun
-    --print (show result)
-    --return (show result)
-
-doRecursive :: RoverS -> IO ()
-doRecursive rover = do
-            putStrLn "Enter the Command: "
-            cmd <- getLine
-            let rds = map runRover  (command cmd)
-            let rovers = foldl   (flip execState) rover rds
-            putStr "Rover is at : "
-            putStrLn  ( (show . pos) rovers )
-            doRecursive rovers
+-- main :: IO String
+-- main = Rover.doOption0 initialPosition
 
 
+-- main :: IO String
+-- main = do
+--           rovm <- RoverM.doOption1 (return(initialPosition))
+--           return $ show (pos rovm)
 
-doLazyMoves :: IO RoverS
-doLazyMoves = do
-    putStrLn "Enter the commands in separate lines: "
-    commands <- getContents
-    evalRoverDataLines (eachLine rovers commands)
-
-evalRoverDataForALine :: IO RoverS -> [RoverData]  -> IO RoverS
-evalRoverDataForALine  iorovers roverDatas  =   do
-                                     rovers  <- iorovers
-                                     let finalRoverInLine = foldl (flip execState) rovers roverDatas
-                                     putStrLn (show finalRoverInLine)
-                                     return finalRoverInLine
-
-evalRoverDataLines :: [[RoverData]] -> IO RoverS
-evalRoverDataLines = foldl  evalRoverDataForALine (return (initialRover))
-
-rovers :: String  -> [ RoverData ]
-rovers   =  map runRover . command
-
-eachLine :: (String -> [RoverData]) -> (String  -> [[RoverData]])
-eachLine f =    \s ->  fmap  f (lines s)
-
-
-tr :: Char -> Command
-tr 'M' = Move 1
-tr 'L' = Turn LeftTurn
-tr 'R' = Turn RightTurn
-tr  _ = None
-
-
-
-command :: String -> [Command]
-command  =  map tr
+main :: IO String
+main = do
+          rpos <- RoverS.doRecursive initialRover
+          return (show rpos)
