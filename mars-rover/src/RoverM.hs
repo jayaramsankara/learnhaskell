@@ -38,7 +38,7 @@ module RoverM (   RoverM(..), doOption1 , Position(..), Direction(..), command, 
        cmd <- getLine
        let cmdToRun = command cmd
        print (show cmdToRun)
-       let posfs  = fmap (flip runRover) cmdToRun
-       let finalPos = foldl foldFun pos posfs
+       let posFns  = fmap (flip runRover) cmdToRun
+       let finalPos = foldl foldFun pos posFns
        print (show finalPos)
        doOption1 (finalPos)
