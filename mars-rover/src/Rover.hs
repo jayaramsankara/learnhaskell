@@ -9,12 +9,10 @@ module Rover
 data Direction = North | East | South | West  deriving (Show)
 
 data Position = Position { x :: Int , y :: Int, dir :: Direction } deriving (Show)
-newtype Error = Error String deriving (Show)
 data Turn = LeftTurn | RightTurn deriving (Show)
 
 data Command = Move Int | Turn Turn  | None deriving (Show)
 
--- type RoverPosition = Either  Error Position
 
 move :: Position -> Int -> Position
 move pos dis  =

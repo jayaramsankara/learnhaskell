@@ -22,5 +22,6 @@ initialPosition =  Position 0 0 North
 
 main :: IO String
 main = do
-          rpos <- RoverS.doRecursive initialRover
+          let  initialRover = RoverS initialPosition
+          rpos <- RoverS.doOption1 initialRover
           return (show rpos)
